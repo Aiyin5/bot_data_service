@@ -117,6 +117,25 @@ function serverStart(){
                 }
             });
         }
+        else if (req.method === 'GET' && pathname === '/unpre' ) {
+            let body = '';
+            req.on('data', (data) => {
+                body += data;
+                console.log("接收到Get请求");
+            });
+            req.on('end',  async () => {
+                try{
+                    let data_res=await sqlCon.select('unst_config');
+                    console.log(data_res);
+                    res.end(JSON.stringify(data_res));
+                }
+                catch (error) {
+                    console.error(`解析请求体为 JSON 对象出错：${error.message}`);
+                    res.statusCode = 400;
+                    res.end('请求体解析错误');
+                }
+            });
+        }
         else {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.write('不支持该请求方法\n');
