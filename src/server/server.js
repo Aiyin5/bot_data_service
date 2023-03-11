@@ -19,7 +19,7 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Post的请求");
+                console.log("接收到Post的请求 /add");
             });
             req.on('end',async() => {
                 try{
@@ -39,12 +39,11 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Post的请求");
+                console.log("接收到Post的请求 /addMulti");
             });
             req.on('end',async() => {
                 try{
                     let data = JSON.parse(body);
-                    console.log(data);
                     for(let item of data){
                         await sqlCon.insert('pre_config',item);
                     }
@@ -61,7 +60,7 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Post的请求");
+                console.log("接收到Post的请求 /delete");
             });
             req.on('end',async() => {
                 try{
@@ -81,12 +80,11 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Post的请求");
+                console.log("接收到Post的请求 /update");
             });
             req.on('end',async() => {
                 try{
                     let data = JSON.parse(body);
-                    console.log(data);
                     let data_res=await sqlCon.update('pre_config',data.data,data.where);
                     console.log(data_res);
                     res.end(JSON.stringify(data_res));
@@ -102,7 +100,7 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Get请求");
+                console.log("接收到Get请求 /data");
             });
             req.on('end',   async () => {
                 try{
@@ -121,7 +119,7 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Get请求");
+                console.log("接收到Get请求 /unpre");
             });
             req.on('end',  async () => {
                 try{
@@ -136,11 +134,53 @@ function serverStart(){
                 }
             });
         }
+        else if (req.method === 'POST' && pathname === '/unpre' ) {
+            let body = '';
+            req.on('data', (data) => {
+                body += data;
+                console.log("接收到Post /unpre请求");
+            });
+            req.on('end',  async () => {
+
+                try{
+                    let data = JSON.parse(body);
+                    let data_res=await sqlCon.insert('unst_config',data);
+                    console.log(data_res);
+                    res.end(JSON.stringify(data_res));
+                }
+                catch (error) {
+                    console.error(`解析请求体为 JSON 对象出错：${error.message}`);
+                    res.statusCode = 400;
+                    res.end('请求体解析错误');
+                }
+            });
+        }
+        else if (req.method === 'PUT' && pathname === '/unpre' ) {
+            let body = '';
+            req.on('data', (data) => {
+                body += data;
+                console.log("接收到Put /unpre请求");
+            });
+            req.on('end',  async () => {
+
+                try{
+                    let data = JSON.parse(body);
+                    let data_res=await sqlCon.update('unst_config',data.data,data.where);
+                    console.log(data_res);
+                    res.end(JSON.stringify(data_res));
+                }
+                catch (error) {
+                    console.error(`解析请求体为 JSON 对象出错：${error.message}`);
+                    res.statusCode = 400;
+                    res.end('请求体解析错误');
+                }
+            });
+        }
         else if (req.method === 'GET' && pathname === '/botInfo' ) {
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Get请求");
+                console.log("接收到Get请求 /botInfo");
             });
             req.on('end',  async () => {
                 try{
@@ -159,7 +199,7 @@ function serverStart(){
             let body = '';
             req.on('data', (data) => {
                 body += data;
-                console.log("接收到Get请求");
+                console.log("接收到POST请求 /botInfo");
             });
             req.on('end',  async () => {
                 let data = JSON.parse(body);
